@@ -1,3 +1,5 @@
+# PLEASE, ADD AN EXPLICATION FOR NEOPHYTE
+
 #==============================================================================
 # ** Game_Player
 #------------------------------------------------------------------------------
@@ -10,7 +12,7 @@ class Game_Player
   # * Determine if Map is Passable
   #     d:  Direction (2,4,6,8)
   #--------------------------------------------------------------------------
-  alias :ww_map_passable? :map_passable?
+  alias_method :ww_map_passable?, :map_passable?
   def map_passable?(x, y, d)
     if @vehicle_type == :water_walk 
       $game_map.boat_passable?(x, y) || super
@@ -21,14 +23,10 @@ class Game_Player
   #-------------------------------------------------------------------------- 
   # * Update
   #--------------------------------------------------------------------------
-  alias :ww_update :update
+  alias_method :ww_update, :update
   def update
-    if @vehicle_type == :walk || @vehicle_type == :water_walk 
-      if $game_switches[3]
-        @vehicle_type = :water_walk
-      else
-        @vehicle_type = :walk
-      end
+    if [:walk,:water_walk].include?(@vehicle_type) 
+      @vehicle_type = ($game_switches[3]) ? :water_walk : :walk
     end
     ww_update
   end
@@ -36,7 +34,7 @@ class Game_Player
   # * 
   #--------------------------------------------------------------------------
   def water_walk?
-    @vehicle_type == :water_walk ? true : false
+    @vehicle_type == :water_walk
   end
   #-------------------------------------------------------------------------- 
   # *
